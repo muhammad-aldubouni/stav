@@ -52,7 +52,7 @@ class CounterViewModel extends BaseViewModel<CounterViewModel> {
   CounterViewModel get newInstance => CounterViewModel();
 
   void increment() {
-    count.value++;
+    count.data++;
     count.notifyChange();
   }
 }
@@ -70,7 +70,7 @@ ServicesLocator.registerViewModel(CounterViewModel());
 Observer<int>(
   notifier: ServicesLocator.getViewModel<CounterViewModel>().count,
   builder: () => Text(
-    '${ServicesLocator.getViewModel<CounterViewModel>().count.value}',
+    '${ServicesLocator.getViewModel<CounterViewModel>().count.data}',
   ),
 )
 ```
