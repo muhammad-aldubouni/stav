@@ -11,29 +11,99 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/to/develop-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+stav is a minimalist flutter package that streamlines MVVM architecture with explicit control over the view model lifecycle, simplifies state management, and enables dynamic theming across Material, Cupertino, and Fluent design languages.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+🟢 easy MVVM and state management  
+🟢 explicit control of view models lifecycle  
+🟢 straightforward service locator for registering services and view models  
+🟢 simple way to deal with theming for Material, Cupertino, and Fluent design languages  
+
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add `stav` to your `pubspec.yaml` dependencies and run `flutter pub get`.
+
+```yaml
+dependencies:
+  stav: ^latest_version
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+### 1. Import the package
 
 ```dart
-const like = 'sample';
+import 'package:stav/stav.dart';
 ```
 
+### 2. Create your ViewModel
+
+Every property should be a `Notifier<T>`:
+
+```dart
+class CounterViewModel extends BaseViewModel<CounterViewModel> {
+  final Notifier<int> count = Notifier<int>(0);
+
+  @override
+  CounterViewModel get newInstance => CounterViewModel();
+
+  void increment() {
+    count.value++;
+    count.notifyChange();
+  }
+}
+```
+
+### 3. Register your ViewModel
+
+```dart
+ServicesLocator.registerViewModel(CounterViewModel());
+```
+
+### 4. Use Observer for reactive UI
+
+```dart
+Observer<int>(
+  notifier: ServicesLocator.getViewModel<CounterViewModel>().count,
+  builder: () => Text(
+    '${ServicesLocator.getViewModel<CounterViewModel>().count.value}',
+  ),
+)
+```
+
+### 5. Theming
+
+Set or switch themes using the `App` class:
+
+```dart
+final app = App();
+app.materialDarkTheme = ThemeData.dark();
+app.materialLightTheme = ThemeData.light();
+app.useSystemTheme(); // or app.useDarkTheme(), app.useLightTheme()
+```
+
+### 6. Start your app
+
+```dart
+void main() {
+  final app = App();
+  app.run(appRoot: () => MyHomePage());
+}
+```
+### 7. Navigate
+
+```dart
+ServicesLocator.getViewModel<CounterViewModel>().navigateTo(
+  navigate: <Your Navigation Function>,
+  preserveViewModel: true,
+);
+```
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+When using `stav`, try to import (material.dart, cupertino.dart, fluent.dart) from the `ui_designs` part of the package as shown:
+
+```dart
+import 'package:stav/ui_designs/material.dart';
+```
