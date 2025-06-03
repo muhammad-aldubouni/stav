@@ -27,7 +27,9 @@ Add `stav` to your `pubspec.yaml` dependencies and run `flutter pub get`.
 
 ```yaml
 dependencies:
-  stav: ^latest_version
+  stav:
+    git:
+        url: "https://github.com/muhammad-aldubouni/stav.git"
 ```
 
 ## Usage
