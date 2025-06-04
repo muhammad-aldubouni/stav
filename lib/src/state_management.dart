@@ -55,6 +55,11 @@ class Notifier<T> {
       state._update();
     }
   }
+
+  void update(void Function(T data) updater) {
+    updater(data);
+    notifyChange();
+  }
 }
 
 extension NotifierExt on Object? {
@@ -62,11 +67,3 @@ extension NotifierExt on Object? {
 }
 
 Notifier<T> toNotifier<T>(T data) => Notifier(data);
-
-class Screen extends InheritedWidget {
-  final dynamic viewModel;
-  const Screen({super.key, required this.viewModel, required super.child});
-
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
-}
