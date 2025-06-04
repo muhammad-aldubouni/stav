@@ -1,6 +1,6 @@
 name: stav
 description: "A minimalist flutter package that streamlines MVVM architecture with explicit control over the view model lifecycle, simplifies state management, and enables dynamic theming across Material, Cupertino, and Fluent design languages."
-version: 0.0.1
+version: 0.7.1
 repository: "https://github.com/muhammad-aldubouni/stav"
 homepage:
 
