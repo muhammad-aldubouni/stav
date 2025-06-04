@@ -56,8 +56,8 @@ class Notifier<T> {
     }
   }
 
-  void update(void Function(T data) updater) {
-    updater(data);
+  void update(T Function(T data) updater) {
+    data = updater(data);
     notifyChange();
   }
 }
