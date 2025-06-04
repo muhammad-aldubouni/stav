@@ -51,10 +51,12 @@ class CounterViewModel extends BaseViewModel<CounterViewModel> {
   @override
   CounterViewModel get newInstance => CounterViewModel();
 
-  void increment() {
+  void incrementMethod1() {
     count.data++;
     count.notifyChange();
   }
+
+  void incrementMethod2() => count.update((data) => data+=1);
 }
 ```
 
