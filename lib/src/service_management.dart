@@ -1,23 +1,23 @@
-import 'package:stav/ui_designs/fluent.dart';
+import 'package:stav/ui_designs/material.dart';
 import 'package:leak_tracker/leak_tracker.dart';
 
-class ServicesLocator {
+class ServiceContainer {
   static final Map<String, (dynamic, bool)> _services = {};
   static void registerService<T>(
     T service, {
     String? serviceName,
-    bool dereferenceWhenGettingService = false,
+    bool unregisterWhenGettingService = false,
   }) =>
       _services[serviceName ?? T.toString()] = (
         service,
-        dereferenceWhenGettingService,
+        unregisterWhenGettingService,
       );
 
   static T getService<T>({String? serviceName}) {
     var service = _services[serviceName ?? T.toString()];
     if (service != null) {
       if (service.$2) {
-        ServicesLocator.unregisterService<T>(serviceName: serviceName);
+        ServiceContainer.unregisterService<T>(serviceName: serviceName);
       }
       return service.$1;
     } else {
@@ -26,9 +26,9 @@ class ServicesLocator {
   }
 
   static void registerViewModel<T>(T viewModel) =>
-      ServicesLocator.registerService(viewModel);
+      ServiceContainer.registerService(viewModel);
 
-  static T getViewModel<T>() => ServicesLocator.getService();
+  static T getViewModel<T>() => ServiceContainer.getService();
 
   static bool unregisterService<T>({String? serviceName}) {
     var deletedValue = _services.remove((serviceName ?? T.toString()));
@@ -50,7 +50,7 @@ abstract class BaseViewModel<T> {
       return;
     }
     T service = newInstance;
-    ServicesLocator.registerService(
+    ServiceContainer.registerService(
       service,
       serviceName: service.runtimeType.toString(),
     );
