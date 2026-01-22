@@ -66,9 +66,4 @@ extension NotifierExt on Object? {
   Notifier<T> toNotifier<T>() => Notifier<T>(this as T);
 }
 
-extension ObserverBindingExt on Widget {
-  Observer bind<T>(Notifier<T> notifier) =>
-      Observer(notifier: notifier, builder: () => this);
-}
-
 Notifier<T> toNotifier<T>(T data) => Notifier(data);
