@@ -1,11 +1,11 @@
 import 'package:stav/ui_designs/material.dart';
 
-class Observer<T> extends StatefulWidget {
-  final Notifier<T> notifier;
+class Observer extends StatefulWidget {
+  final Notifier notifier;
   final Widget Function() builder;
   const Observer({super.key, required this.notifier, required this.builder});
   @override
-  State<Observer> createState() => _ObserverState<T>();
+  State<Observer> createState() => _ObserverState();
 }
 
 class _ObserverState<T> extends State<Observer> {
@@ -64,6 +64,11 @@ class Notifier<T> {
 
 extension NotifierExt on Object? {
   Notifier<T> toNotifier<T>() => Notifier<T>(this as T);
+}
+
+extension ObserverBindingExt on Widget {
+  Observer bind<T>(Notifier<T> notifier) =>
+      Observer(notifier: notifier, builder: () => this);
 }
 
 Notifier<T> toNotifier<T>(T data) => Notifier(data);
