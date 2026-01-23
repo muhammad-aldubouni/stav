@@ -20,8 +20,9 @@ class ServiceContainer {
     }
   }
 
-  static void registerViewModel(BaseViewModel viewModel) =>
-      ServiceContainer.registerService(viewModel);
+  static void registerViewModel<T extends BaseViewModel<T>>(
+    T Function() viewModel,
+  ) => ServiceContainer.registerService(viewModel);
 
   static T getViewModel<T>() => ServiceContainer.getService();
 
@@ -32,7 +33,7 @@ class ServiceContainer {
 }
 
 abstract class BaseViewModel<T extends BaseViewModel<T>> {
-  T get newInstance;
+  T Function() get newInstance;
   void Function() dispose = () {};
   void navigateTo({
     BuildContext? ctx,
@@ -44,8 +45,7 @@ abstract class BaseViewModel<T extends BaseViewModel<T>> {
       navigate(ctx);
       return;
     }
-    T service = newInstance;
-    ServiceContainer.registerService<T>(service);
+    ServiceContainer.registerViewModel<T>(newInstance);
     dispose();
     navigate(ctx);
   }
