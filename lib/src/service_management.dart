@@ -59,8 +59,8 @@ abstract class BaseViewModel<T extends BaseViewModel<T>> {
       navigate(ctx);
       return;
     }
-    ServiceContainer.registerViewModel<T>(newInstance);
-    dispose();
     navigate(ctx);
+    dispose();
+    ServiceContainer.registerViewModel<T>(newInstance);
   }
 }
