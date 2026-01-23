@@ -20,9 +20,8 @@ class ServiceContainer {
     }
   }
 
-  static void registerViewModel<T extends BaseViewModel<T>>(
-    BaseViewModel viewModel,
-  ) => ServiceContainer.registerService(viewModel);
+  static void registerViewModel<T extends BaseViewModel<T>>(T viewModel) =>
+      ServiceContainer.registerService(viewModel);
 
   static T getViewModel<T extends BaseViewModel<T>>() {
     T viewModel = ServiceContainer.getService();
