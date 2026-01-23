@@ -87,6 +87,7 @@ void main() {
 
 ```dart
 ServiceContainer.getViewModel<CounterViewModel>().navigateTo(
+  ctx: context,
   navigate: <Your Navigation Function>,
   preserveViewModel: true,
 );
