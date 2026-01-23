@@ -47,7 +47,7 @@ class _ObserverState extends State<Observer> {
 }
 
 class Notifier<T> {
-  final List<_ObserverState> _observers = [];
+  final Set<_ObserverState> _observers = {};
 
   late T data;
   Notifier(this.data);
@@ -60,7 +60,9 @@ class Notifier<T> {
   }
 
   void update(T Function(T data) updater) {
-    data = updater(data);
+    final newData = updater(data);
+    if (newData == data) return;
+    data = newData;
     notifyChange();
   }
 }
