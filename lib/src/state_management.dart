@@ -1,48 +1,49 @@
-import 'package:stav/ui_designs/material.dart';
+import 'package:flutter/material.dart';
 
 class Observer extends StatefulWidget {
   final Notifier notifier;
   final Widget Function() builder;
   const Observer({super.key, required this.notifier, required this.builder});
+
   @override
   State<Observer> createState() => _ObserverState();
 }
 
-class _ObserverState<T> extends State<Observer> {
-  late Notifier _old;
+class _ObserverState extends State<Observer> {
+  late Notifier _activeNotifier;
+
   @override
   void initState() {
     super.initState();
-    assert(() {
-      _old = widget.notifier;
-      return true;
-    }());
-    widget.notifier._observers.add(this);
+    _activeNotifier = widget.notifier;
+    _subscribe();
   }
 
   @override
-  Widget build(BuildContext context) {
-    assert(() {
-      if (_old != widget.notifier) {
-        _old._observers.remove(this);
-        widget.notifier._observers.add(this);
-      }
-
-      return true;
-    }());
-
-    return widget.builder();
+  void didUpdateWidget(covariant Observer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.notifier != _activeNotifier) {
+      _unsubscribe();
+      _activeNotifier = widget.notifier;
+      _subscribe();
+    }
   }
 
+  void _subscribe() => _activeNotifier._observers.add(this);
+  void _unsubscribe() => _activeNotifier._observers.remove(this);
+
   void _update() {
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
-    widget.notifier._observers.remove(this);
+    _unsubscribe();
     super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) => widget.builder();
 }
 
 class Notifier<T> {
@@ -50,8 +51,10 @@ class Notifier<T> {
 
   late T data;
   Notifier(this.data);
+
   void notifyChange() {
-    for (_ObserverState state in _observers) {
+    final observersCopy = List<_ObserverState>.from(_observers);
+    for (_ObserverState state in observersCopy) {
       state._update();
     }
   }
