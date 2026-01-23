@@ -25,7 +25,7 @@ class ServiceContainer {
 
   static T getViewModel<T extends BaseViewModel<T>>() {
     T viewModel = ServiceContainer.getService();
-    viewModel.safeInit();
+    viewModel._safeInit();
     return viewModel;
   }
 
@@ -37,16 +37,17 @@ class ServiceContainer {
 
 abstract class BaseViewModel<T extends BaseViewModel<T>> {
   T get newInstance;
-  void Function() dispose = () {};
-  void Function() init = () {};
-  bool _initialized = false;
+  void dispose() {}
+  void init() {}
 
-  void safeInit() {
+  void _safeInit() {
     if (!_initialized) {
       init();
       _initialized = true;
     }
   }
+
+  bool _initialized = false;
 
   void navigateTo({
     BuildContext? ctx,
