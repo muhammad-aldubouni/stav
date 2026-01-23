@@ -21,10 +21,14 @@ class ServiceContainer {
   }
 
   static void registerViewModel<T extends BaseViewModel<T>>(
-    T Function() viewModel,
+    BaseViewModel viewModel,
   ) => ServiceContainer.registerService(viewModel);
 
-  static T getViewModel<T>() => ServiceContainer.getService();
+  static T getViewModel<T extends BaseViewModel<T>>() {
+    T viewModel = ServiceContainer.getService();
+    viewModel.init();
+    return viewModel;
+  }
 
   static bool unregisterService<T>({String? serviceName}) {
     var deletedValue = _services.remove((T, serviceName));
@@ -33,8 +37,9 @@ class ServiceContainer {
 }
 
 abstract class BaseViewModel<T extends BaseViewModel<T>> {
-  T Function() get newInstance;
+  T get newInstance;
   void Function() dispose = () {};
+  void Function() init = () {};
   void navigateTo({
     BuildContext? ctx,
     required void Function(BuildContext? ctx) navigate,
