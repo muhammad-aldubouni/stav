@@ -1,20 +1,15 @@
 import 'package:stav/ui_designs/material.dart';
-import 'package:leak_tracker/leak_tracker.dart';
 
 class ServiceContainer {
-  static final Map<String, (dynamic, bool)> _services = {};
+  static final Map<(Type, String?), (dynamic, bool)> _services = {};
   static void registerService<T>(
     T service, {
     String? serviceName,
     bool unregisterWhenGettingService = false,
-  }) =>
-      _services[serviceName ?? T.toString()] = (
-        service,
-        unregisterWhenGettingService,
-      );
+  }) => _services[(T, serviceName)] = (service, unregisterWhenGettingService);
 
   static T getService<T>({String? serviceName}) {
-    var service = _services[serviceName ?? T.toString()];
+    var service = _services[(T, serviceName)];
     if (service != null) {
       if (service.$2) {
         ServiceContainer.unregisterService<T>(serviceName: serviceName);
@@ -25,20 +20,20 @@ class ServiceContainer {
     }
   }
 
-  static void registerViewModel<T>(T viewModel) =>
+  static void registerViewModel(BaseViewModel viewModel) =>
       ServiceContainer.registerService(viewModel);
 
   static T getViewModel<T>() => ServiceContainer.getService();
 
   static bool unregisterService<T>({String? serviceName}) {
-    var deletedValue = _services.remove((serviceName ?? T.toString()));
+    var deletedValue = _services.remove((T, serviceName));
     return deletedValue != null ? true : false;
   }
 }
 
-abstract class BaseViewModel<T> {
+abstract class BaseViewModel<T extends BaseViewModel<T>> {
   T get newInstance;
-
+  void Function() dispose = () {};
   void navigateTo({
     BuildContext? ctx,
     required void Function(BuildContext? ctx) navigate,
@@ -50,11 +45,8 @@ abstract class BaseViewModel<T> {
       return;
     }
     T service = newInstance;
-    ServiceContainer.registerService(
-      service,
-      serviceName: service.runtimeType.toString(),
-    );
-    forceGC();
+    ServiceContainer.registerService<T>(service);
+    dispose();
     navigate(ctx);
   }
 }

@@ -1,16 +1,3 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
-
 stav is a minimalist flutter package that streamlines MVVM architecture with explicit control over the view model lifecycle, simplifies state management, and enables dynamic theming across Material, Cupertino, and Fluent design languages.
 
 ## Features
@@ -63,16 +50,16 @@ class CounterViewModel extends BaseViewModel<CounterViewModel> {
 ### 3. Register your ViewModel
 
 ```dart
-ServicesLocator.registerViewModel(CounterViewModel());
+ServiceContainer.registerViewModel(CounterViewModel());
 ```
 
 ### 4. Use Observer for reactive UI
 
 ```dart
 Observer<int>(
-  notifier: ServicesLocator.getViewModel<CounterViewModel>().count,
+  notifier: ServiceContainer.getViewModel<CounterViewModel>().count,
   builder: () => Text(
-    '${ServicesLocator.getViewModel<CounterViewModel>().count.data}',
+    '${ServiceContainer.getViewModel<CounterViewModel>().count.data}',
   ),
 )
 ```
@@ -99,15 +86,8 @@ void main() {
 ### 7. Navigate
 
 ```dart
-ServicesLocator.getViewModel<CounterViewModel>().navigateTo(
+ServiceContainer.getViewModel<CounterViewModel>().navigateTo(
   navigate: <Your Navigation Function>,
   preserveViewModel: true,
 );
-```
-## Additional information
-
-When using `stav`, try to import (material.dart, cupertino.dart, fluent.dart) from the `ui_designs` part of the package as shown:
-
-```dart
-import 'package:stav/ui_designs/material.dart';
 ```
