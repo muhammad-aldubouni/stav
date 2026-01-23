@@ -60,7 +60,11 @@ abstract class BaseViewModel<T extends BaseViewModel<T>> {
       return;
     }
     navigate(ctx);
-    dispose();
-    ServiceContainer.registerViewModel<T>(newInstance);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      T service = newInstance;
+      ServiceContainer.registerViewModel<T>(service);
+      dispose();
+    });
   }
 }
