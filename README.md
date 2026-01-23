@@ -56,7 +56,7 @@ ServiceContainer.registerViewModel(CounterViewModel());
 ### 4. Use Observer for reactive UI
 
 ```dart
-Observer<int>(
+Observer(
   notifier: ServiceContainer.getViewModel<CounterViewModel>().count,
   builder: () => Text(
     '${ServiceContainer.getViewModel<CounterViewModel>().count.data}',
