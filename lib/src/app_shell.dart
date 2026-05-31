@@ -3,8 +3,15 @@ import 'package:stav/ui_designs/cupertino.dart';
 import 'package:stav/ui_designs/material.dart';
 import 'package:stav/src/app_attributes.dart';
 
-_AppState? _state;
 Widget Function() _root = () => const Placeholder();
+
+class _AppNotifier extends ValueNotifier<Null> {
+  _AppNotifier(super.value);
+
+  void notifyChange() => notifyListeners();
+}
+
+final _AppNotifier _updater = _AppNotifier(null);
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -20,19 +27,21 @@ class App extends StatefulWidget {
     runApp(this);
   }
 
-  void _update() {
-    Future.delayed(const Duration(seconds: 0), () async {
-      bool isUpdated = false;
-      while (!isUpdated) {
-        await Future.delayed(const Duration(milliseconds: 1), () {
-          if (_state != null) {
-            _state?.update();
-            isUpdated = true;
-          }
-        });
-      }
-    });
-  }
+  // void _update() {
+  //   Future.delayed(const Duration(seconds: 0), () async {
+  //     bool isUpdated = false;
+  //     while (!isUpdated) {
+  //       await Future.delayed(const Duration(milliseconds: 1), () {
+  //         if (_state != null) {
+  //           _state?.update();
+  //           isUpdated = true;
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+
+  void _update() => _updater.notifyChange();
 
   void _currentThemeChanged(ThemeMode changedTheme) {
     if (changedTheme == ThemingAttributes.currentTheme) {
@@ -131,23 +140,27 @@ class App extends StatefulWidget {
 class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void initState() {
-    _state = this;
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
 
-  void update() {
-    setState(() {});
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => _root();
+  Widget build(BuildContext context) => ValueListenableBuilder(
+    valueListenable: _updater,
+    builder: (_, _, _) => _root(),
+  );
 
   @override
   void didChangePlatformBrightness() {
     if (ThemingAttributes.currentTheme == ThemeMode.system) {
       ThemingAttributes.syncToSystemTheme();
-      update();
+      _updater.notifyChange();
     }
     super.didChangePlatformBrightness();
   }
