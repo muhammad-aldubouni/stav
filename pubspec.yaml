@@ -5,12 +5,12 @@ repository: "https://github.com/muhammad-aldubouni/stav"
 homepage:
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: ^3.12.0
+  flutter: '>=3.0.0 <4.0.0'
 
 dependencies: 
   material_ui:
-  cupertino_ui:
+  cupertino_ui: 
   fluent_ui:
   go_router:
   flutter_animate:

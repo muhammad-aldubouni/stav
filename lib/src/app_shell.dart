@@ -90,9 +90,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
-    valueListenable: _updater,
-    builder: (_, _, _) => _root(),
-  );
+        valueListenable: _updater,
+        builder: (_, _, _) => _root(),
+      );
 
   @override
   void didChangePlatformBrightness() {
