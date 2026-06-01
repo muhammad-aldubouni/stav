@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:stav/src/app_attributes.dart';
+import 'package:state_shell/src/app_attributes.dart';
 
 Widget Function() _root = () => const Placeholder();
 
@@ -11,12 +11,13 @@ class _AppNotifier extends ValueNotifier<Null> {
 
 final _AppNotifier _updater = _AppNotifier(null);
 
+T appTheme<T>() => ThemingAttributes.theme;
+
 class App extends StatefulWidget {
   const App({super.key});
 
   @override
   State<App> createState() => _AppState();
-
   void run({Widget Function()? appRoot}) async {
     WidgetsFlutterBinding.ensureInitialized();
     if (appRoot != null) {
@@ -90,9 +91,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
-        valueListenable: _updater,
-        builder: (_, _, _) => _root(),
-      );
+    valueListenable: _updater,
+    builder: (_, _, _) => _root(),
+  );
 
   @override
   void didChangePlatformBrightness() {

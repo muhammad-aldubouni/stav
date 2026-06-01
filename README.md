@@ -3,18 +3,18 @@
 ## Features
 
 🟢 state management  
-🟢 simple way to deal with dynaming theming for any ui package  
+🟢 simple way to deal with dynaming theming for any ui package
 
 
 ## Getting started
 
-Add `stav` to your `pubspec.yaml` dependencies and run `flutter pub get`.
+Add `state_shell` to your `pubspec.yaml` dependencies and run `flutter pub get`.
 
 ```yaml
 dependencies:
-  stav:
+  state_shell:
     git:
-        url: "https://github.com/muhammad-aldubouni/stav.git"
+        url: "https://github.com/muhammad-aldubouni/state_shell.git"
 ```
 
 ## Usage
