@@ -1,6 +1,4 @@
-import 'package:stav/ui_designs/fluent.dart';
-import 'package:stav/ui_designs/cupertino.dart';
-import 'package:stav/ui_designs/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:stav/src/app_attributes.dart';
 
 Widget Function() _root = () => const Placeholder();
@@ -27,81 +25,21 @@ class App extends StatefulWidget {
     runApp(this);
   }
 
-  // void _update() {
-  //   Future.delayed(const Duration(seconds: 0), () async {
-  //     bool isUpdated = false;
-  //     while (!isUpdated) {
-  //       await Future.delayed(const Duration(milliseconds: 1), () {
-  //         if (_state != null) {
-  //           _state?.update();
-  //           isUpdated = true;
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
-
   void _update() => _updater.notifyChange();
 
-  void _currentThemeChanged(ThemeMode changedTheme) {
-    if (changedTheme == ThemingAttributes.currentTheme) {
-      if (changedTheme == ThemeMode.dark) {
-        ThemingAttributes.setThemeToDark();
-      } else {
-        ThemingAttributes.setThemeToLight();
-      }
-    } else {
-      Brightness currentBrightness =
-          changedTheme == ThemeMode.dark ? Brightness.dark : Brightness.light;
-
-      if (ThemingAttributes.currentTheme != ThemeMode.system) {
-        return;
-      }
-      if (ThemingAttributes.brightness == currentBrightness) {
-        if (ThemingAttributes.brightness == Brightness.dark) {
-          ThemingAttributes.setThemeToDark();
-        } else {
-          ThemingAttributes.setThemeToLight();
-        }
-      }
-    }
-  }
-
-  set materialDarkTheme(ThemeData theme) {
-    ThemingAttributes.materialDarkTheme = theme;
-    _currentThemeChanged(ThemeMode.dark);
+  set darkTheme(dynamic theme) {
+    ThemingAttributes.darkTheme = theme;
     _update();
   }
 
-  set materialLightTheme(ThemeData theme) {
-    ThemingAttributes.materialLightTheme = theme;
-    _currentThemeChanged(ThemeMode.light);
+  set lightTheme(dynamic theme) {
+    ThemingAttributes.lightTheme = theme;
     _update();
   }
 
-  set cupertinoDarkTheme(CupertinoThemeData theme) {
-    ThemingAttributes.cupertinoDarkTheme = theme;
-    _currentThemeChanged(ThemeMode.dark);
-    _update();
-  }
+  get darkTheme => ThemingAttributes.darkTheme;
 
-  set cuoertinoLightTheme(CupertinoThemeData theme) {
-    ThemingAttributes.cupertinoLightTheme = theme;
-    _currentThemeChanged(ThemeMode.light);
-    _update();
-  }
-
-  set fluentDarkTheme(FluentThemeData theme) {
-    ThemingAttributes.fluentDarkTheme = theme;
-    _currentThemeChanged(ThemeMode.dark);
-    _update();
-  }
-
-  set fluentLightTheme(FluentThemeData theme) {
-    ThemingAttributes.fluentLightTheme = theme;
-    _currentThemeChanged(ThemeMode.light);
-    _update();
-  }
+  get lightTheme => ThemingAttributes.lightTheme;
 
   void useLightTheme() {
     ThemingAttributes.currentTheme = ThemeMode.light;
@@ -112,6 +50,12 @@ class App extends StatefulWidget {
   void useDarkTheme() {
     ThemingAttributes.currentTheme = ThemeMode.dark;
     ThemingAttributes.setThemeToDark();
+    _update();
+  }
+
+  void useSystemTheme() {
+    ThemingAttributes.currentTheme = ThemeMode.system;
+    ThemingAttributes.syncToSystemTheme();
     _update();
   }
 
@@ -127,12 +71,6 @@ class App extends StatefulWidget {
         useLightTheme();
       }
     }
-    _update();
-  }
-
-  void useSystemTheme() {
-    ThemingAttributes.currentTheme = ThemeMode.system;
-    ThemingAttributes.syncToSystemTheme();
     _update();
   }
 }

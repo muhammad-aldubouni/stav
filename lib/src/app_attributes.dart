@@ -1,41 +1,20 @@
-import 'package:stav/ui_designs/fluent.dart';
-import 'package:stav/ui_designs/cupertino.dart';
-import 'package:stav/ui_designs/material.dart';
+import 'dart:ui';
 import 'package:flutter/scheduler.dart';
 
+enum ThemeMode { light, dark, system }
+
 class ThemingAttributes {
-  static Brightness get brightness =>
+  static get brightness =>
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
 
-  static ThemeData materialLightTheme = ThemeData.light();
-  static ThemeData materialDarkTheme = ThemeData.dark();
+  static dynamic lightTheme;
+  static dynamic darkTheme;
 
-  static CupertinoThemeData cupertinoLightTheme = CupertinoThemeData().copyWith(
-    brightness: Brightness.light,
-  );
-  static CupertinoThemeData cupertinoDarkTheme = CupertinoThemeData().copyWith(
-    brightness: Brightness.dark,
-  );
+  static dynamic theme;
 
-  static FluentThemeData fluentLightTheme = FluentThemeData.light();
-  static FluentThemeData fluentDarkTheme = FluentThemeData.dark();
+  static void setThemeToLight() => theme = lightTheme;
 
-  static ThemeData materialTheme = ThemingAttributes.materialDarkTheme;
-  static CupertinoThemeData cupertinoTheme =
-      ThemingAttributes.cupertinoDarkTheme;
-  static FluentThemeData fluentTheme = ThemingAttributes.fluentDarkTheme;
-
-  static void setThemeToLight() {
-    ThemingAttributes.materialTheme = ThemingAttributes.materialLightTheme;
-    ThemingAttributes.cupertinoTheme = ThemingAttributes.cupertinoLightTheme;
-    ThemingAttributes.fluentTheme = ThemingAttributes.fluentLightTheme;
-  }
-
-  static void setThemeToDark() {
-    ThemingAttributes.materialTheme = ThemingAttributes.materialDarkTheme;
-    ThemingAttributes.cupertinoTheme = ThemingAttributes.cupertinoDarkTheme;
-    ThemingAttributes.fluentTheme = ThemingAttributes.fluentDarkTheme;
-  }
+  static void setThemeToDark() => theme = darkTheme;
 
   static void syncToSystemTheme() {
     bool isDarkMode = brightness == Brightness.dark;
