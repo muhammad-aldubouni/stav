@@ -1,11 +1,9 @@
-stav is a minimalist flutter package that streamlines MVVM architecture with explicit control over the view model lifecycle, simplifies state management, and enables dynamic theming across Material, Cupertino, and Fluent design languages.
+
 
 ## Features
 
-🟢 easy MVVM and state management  
-🟢 explicit control of view models lifecycle  
-🟢 straightforward service locator for registering services and view models  
-🟢 simple way to deal with theming for Material, Cupertino, and Fluent design languages  
+🟢 state management  
+🟢 simple way to deal with dynaming theming for any ui package  
 
 
 ## Getting started
@@ -47,48 +45,35 @@ class CounterViewModel extends BaseViewModel<CounterViewModel> {
 }
 ```
 
-### 3. Register your ViewModel
+
+### 3. define a notifier 
 
 ```dart
-ServiceContainer.registerViewModel(CounterViewModel());
+Notifier<int> counter = Notifier(0);
 ```
 
-### 4. Use Observer for reactive UI
+
+### 4. Use the Notifier with an Observer to manage state
 
 ```dart
 Observer(
-  notifier: ServiceContainer.getViewModel<CounterViewModel>().count,
+  notifier: counter,
   builder: () => Text(
-    '${ServiceContainer.getViewModel<CounterViewModel>().count.data}',
+    '${count.data}',
   ),
 )
 ```
 
+
+
 ### 5. Theming
 
-Set or switch themes using the `App` class:
+Set or switch themes using the `app` object:
 
 ```dart
 final app = App();
-app.materialDarkTheme = ThemeData.dark();
-app.materialLightTheme = ThemeData.light();
+app.darkTheme = ThemeData.dark();
+app.lightTheme = ThemeData.light();
 app.useSystemTheme(); // or app.useDarkTheme(), app.useLightTheme()
-```
-
-### 6. Start your app
-
-```dart
-void main() {
-  final app = App();
-  app.run(appRoot: () => MyHomePage());
-}
-```
-### 7. Navigate
-
-```dart
-ServiceContainer.getViewModel<CounterViewModel>().navigateTo(
-  ctx: context,
-  navigate: <Your Navigation Function>,
-  preserveViewModel: true,
-);
+app.run(appRoot: () => MyHomePage());
 ```
