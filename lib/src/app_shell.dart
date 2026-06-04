@@ -42,6 +42,9 @@ class App extends StatefulWidget {
 
   get lightTheme => ThemingAttributes.lightTheme;
 
+  String get currentTheme =>
+    ThemingAttributes.currentTheme == ThemeMode.light ? "light" : "dark";
+
   void useLightTheme() {
     ThemingAttributes.currentTheme = ThemeMode.light;
     ThemingAttributes.setThemeToLight();
