@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// The UI Widget that listens to a specific [Notifier].
 class Observer extends StatefulWidget {
   final Notifier notifier;
   final Widget Function() builder;
@@ -29,8 +30,9 @@ class _ObserverState extends State<Observer> {
     }
   }
 
-  void _subscribe() => _activeNotifier._observers.add(this);
-  void _unsubscribe() => _activeNotifier._observers.remove(this);
+  // Uses the public API to subscribe/unsubscribe
+  void _subscribe() => _activeNotifier.addListener(_update);
+  void _unsubscribe() => _activeNotifier.removeListener(_update);
 
   void _update() {
     if (mounted) setState(() {});
@@ -46,19 +48,29 @@ class _ObserverState extends State<Observer> {
   Widget build(BuildContext context) => widget.builder();
 }
 
+/// A lightweight, fine-grained observable property wrapper.
 class Notifier<T> {
-  final Set<_ObserverState> _observers = {};
+  // Private set ensures external code can't clear or overwrite the listeners
+  final Set<VoidCallback> _listeners = {};
 
   late T data;
   Notifier(this.data);
 
+  /// Allows UI widgets or pure Dart classes/tests to listen to changes.
+  void addListener(VoidCallback listener) => _listeners.add(listener);
+
+  /// Cleans up subscriptions to prevent memory leaks.
+  void removeListener(VoidCallback listener) => _listeners.remove(listener);
+
+  /// Loops through copy list and triggers all registered functions.
   void notifyChange() {
-    final observersCopy = List<_ObserverState>.from(_observers);
-    for (_ObserverState state in observersCopy) {
-      state._update();
+    final listenersCopy = List<VoidCallback>.from(_listeners);
+    for (VoidCallback listener in listenersCopy) {
+      listener();
     }
   }
 
+  /// Updates the value and notifies listeners only if the data actually changed.
   void update(T Function(T data) updater) {
     final newData = updater(data);
     if (newData == data) return;
@@ -67,6 +79,7 @@ class Notifier<T> {
   }
 }
 
+// Syntactic Sugar Extensions
 extension NotifierExt on Object? {
   Notifier<T> toNotifier<T>() => Notifier<T>(this as T);
 }

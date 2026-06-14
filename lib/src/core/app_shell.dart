@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:state_shell/src/app_attributes.dart';
+import 'package:state_shell/src/core/app_attributes.dart';
 
 Widget Function() _root = () => const Placeholder();
 
